@@ -1,7 +1,5 @@
-package com.oracleone.forumhub.controller;
+package com.oracleone.forumhub.domain.topico;
 
-import com.oracleone.forumhub.dto.TopicoDTO;
-import com.oracleone.forumhub.service.TopicoService;
 import com.oracleone.forumhub.utils.TopicoConverter;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,9 +13,9 @@ import java.util.List;
 public class TopicoController {
 
 
-    private final TopicoService topicoService;
+    private final Topico.TopicoService topicoService;
 
-    public TopicoController(TopicoService topicoService) {
+    public TopicoController(Topico.TopicoService topicoService) {
         this.topicoService = topicoService;
     }
 

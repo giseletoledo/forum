@@ -1,7 +1,7 @@
 package com.oracleone.forumhub.utils;
 
-import com.oracleone.forumhub.dto.TopicoDTO;
-import com.oracleone.forumhub.model.Topico;
+import com.oracleone.forumhub.domain.topico.TopicoDTO;
+import com.oracleone.forumhub.domain.topico.Topico;
 
 public class TopicoConverter {
 

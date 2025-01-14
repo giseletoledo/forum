@@ -1,6 +1,4 @@
-package com.oracleone.forumhub.dto;
-
-import com.oracleone.forumhub.model.Estado;
+package com.oracleone.forumhub.domain.topico;
 
 import java.time.LocalDateTime;
 
