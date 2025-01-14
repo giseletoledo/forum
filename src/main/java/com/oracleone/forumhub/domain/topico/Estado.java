@@ -1,4 +1,4 @@
-package com.oracleone.forumhub.model;
+package com.oracleone.forumhub.domain.topico;
 
 public enum Estado {
     ABERTO,
