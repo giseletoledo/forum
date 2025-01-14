@@ -22,11 +22,13 @@ public class SecurityConfigurations {
                 .build();
     }
 
+    //Usado em AutenticacaoController
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+    //criptografia de senha com bcrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
