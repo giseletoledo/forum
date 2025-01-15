@@ -22,7 +22,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API Forumhub")
+                    .withIssuer("API ForumHub")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
@@ -35,7 +35,7 @@ public class TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("API Forumhub")
+                    .withIssuer("API ForumHub")
                     .build()
                     .verify(tokenJWT)
                     .getSubject();
