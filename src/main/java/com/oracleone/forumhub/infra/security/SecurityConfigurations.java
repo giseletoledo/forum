@@ -3,6 +3,8 @@ package com.oracleone.forumhub.infra.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,17 +22,35 @@ public class SecurityConfigurations {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Autowired
+    private Environment environment;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/login").permitAll(); // Você pode adicionar outros endpoints aqui conforme necessário
+                    // Check if the active profile is 'dev'
+                    if (isDevelopmentEnvironment()) {
+                        req.requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
+                    }
+                    req.requestMatchers("/login").permitAll();
                     req.anyRequest().authenticated();
                 })
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)//define a ordem dos filters
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    private boolean isDevelopmentEnvironment() {
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String profile : activeProfiles) {
+            if ("dev".equals(profile)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     //Usado em AutenticacaoController

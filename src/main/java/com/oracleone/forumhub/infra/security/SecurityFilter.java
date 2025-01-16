@@ -1,6 +1,6 @@
 package com.oracleone.forumhub.infra.security;
 
-import com.oracleone.forumhub.domain.usuario.UsuarioRepository;
+import com.oracleone.forumhub.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,20 +24,24 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var tokenJWT = recuperarToken(request);
+        String requestURI = request.getRequestURI();
 
+        // Ignorar validação de token para Swagger
+        if (requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        var tokenJWT = recuperarToken(request);
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
-
-            var usuarioOptional = repository.findByLogin(subject);//recebendo um optional
+            var usuarioOptional = repository.findByLogin(subject);
 
             if (usuarioOptional.isPresent()) {
-                var usuario = usuarioOptional.get();//tratando um optional
+                var usuario = usuarioOptional.get();
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
         }
 
         filterChain.doFilter(request, response);
