@@ -30,7 +30,6 @@ public class SecurityConfigurations {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    // Check if the active profile is 'dev'
                     if (isDevelopmentEnvironment()) {
                         req.requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     }
@@ -45,13 +44,12 @@ public class SecurityConfigurations {
         String[] activeProfiles = environment.getActiveProfiles();
         for (String profile : activeProfiles) {
             if ("dev".equals(profile)) {
+                System.out.println("Development profile detected");
                 return true;
             }
         }
         return false;
     }
-
-
 
     //Usado em AutenticacaoController
     @Bean

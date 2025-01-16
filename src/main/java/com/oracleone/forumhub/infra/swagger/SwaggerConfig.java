@@ -1,21 +1,25 @@
 package com.oracleone.forumhub.infra.swagger;
 
+import io.swagger.v3.oas.models.OpenAPI;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+
 
 @Configuration
 public class SwaggerConfig {
+
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.oracleone.forumhub"))
-                .paths(PathSelectors.any())
-                .build();
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("ForumHub API")
+                        .version("1.0")
+                        .description("API REST para o Fórum Hub")
+                        .license(new License().name("MIT").url("https://opensource.org/licenses/MIT"))
+                );
     }
 }
-

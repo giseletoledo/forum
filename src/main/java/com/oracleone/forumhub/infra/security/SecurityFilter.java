@@ -20,31 +20,35 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository repository;
+    private UsuarioRepository usuarioRepository;
+
+    public SecurityFilter(TokenService tokenService, UsuarioRepository userRepository) {
+        this.tokenService = tokenService;
+        this.usuarioRepository = userRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
 
-        // Ignorar validação de token para Swagger
-        if (requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        var tokenJwt = recuperarToken(request);
 
-        var tokenJWT = recuperarToken(request);
-        if (tokenJWT != null) {
-            var subject = tokenService.getSubject(tokenJWT);
-            var usuarioOptional = repository.findByLogin(subject);
+        if (tokenJwt != null) {
+            var userName = tokenService.getSubject(tokenJwt);
+            var usuario = usuarioRepository.findByLogin(userName);
 
-            if (usuarioOptional.isPresent()) {
-                var usuario = usuarioOptional.get();
-                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if(!usuario.isPresent()){
+                throw new RuntimeException("Usuário não foi encontrado");
             }
+
+            var usuarioBanco = usuario.get();
+
+            var authentication = new UsernamePasswordAuthenticationToken(usuario,null, usuarioBanco.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
+
     }
 
     private String recuperarToken(HttpServletRequest request) {
