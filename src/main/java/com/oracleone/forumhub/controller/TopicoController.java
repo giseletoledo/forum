@@ -52,10 +52,14 @@ public class TopicoController {
     }
 
     @GetMapping("/search")
-    public List<TopicoDTO> getTopicosByCursoAndYear(@RequestParam String curso, @RequestParam int year) {
-        return topicoService.findTopicosByCursoAndYear(curso, year)
+    public ResponseEntity<List<TopicoDTO>> getTopicosByCursoEAno(@RequestParam String curso, @RequestParam int ano) {
+        // Chama o serviço para buscar os tópicos com base no curso e ano
+        List<TopicoDTO> topicos = topicoService.buscarPorAnoECurso(ano, curso)
                 .stream()
-                .map(TopicoConverter::toDTO)  // Use the TopicoConverter to map Topico to TopicoDTO
+                .map(TopicoConverter::toDTO)  // Converte os tópicos para DTO
                 .toList();
+
+        return ResponseEntity.ok(topicos);
     }
+
 }

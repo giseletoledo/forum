@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +17,7 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
     boolean existsByTituloAndMensagem(String titulo, String mensagem);
 
     // Metodo adicional para encontrar tópicos por curso e ano (opcional)
-    @Query("SELECT t FROM Topico t WHERE t.curso = :curso AND FUNCTION('YEAR', t.dataCriacao) = :year")
-    Optional<Topico> findByCursoAndDataCriacaoYear(@Param("curso") String curso, @Param("year") int year);
+    @Query("SELECT t FROM Topico t WHERE YEAR(t.dataCriacao) = :ano AND t.curso = :curso")
+    List<Topico> findByAnoAndCurso(@Param("ano") int ano, @Param("curso") String curso);
+
 }

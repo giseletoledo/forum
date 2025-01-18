@@ -34,7 +34,8 @@ public class SecurityConfigurations {
                         req.requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     }
                     req.requestMatchers("/login").permitAll();
-                    req.anyRequest().authenticated();
+                    req.requestMatchers(HttpMethod.GET, "/topicos/search").permitAll()// Permitir acesso GET à rota de busca
+                    .anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

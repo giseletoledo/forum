@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,8 +63,8 @@ public class TopicoService {
         topicoRepository.deleteById(id);
     }
 
-    public Optional<Topico> findTopicosByCursoAndYear(String curso, int year) {
-        return topicoRepository.findByCursoAndDataCriacaoYear(curso, year);
+    public List<Topico> buscarPorAnoECurso(int ano, String curso) {
+        return topicoRepository.findByAnoAndCurso(ano, curso);
     }
 
 }
