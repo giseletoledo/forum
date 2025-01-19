@@ -1,4 +1,4 @@
-# API ForumHub
+# <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-plain.svg"  width="6%" /> API ForumHub
 
 ## Descrição
 A API ForumHub é uma aplicação backend desenvolvida em Java utilizando Spring Boot, destinada à gestão de tópicos em um fórum. Ela permite a criação, edição e consulta de tópicos baseados em cursos e datas de criação.
