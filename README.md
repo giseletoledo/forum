@@ -10,7 +10,7 @@ A API ForumHub é uma aplicação backend desenvolvida em Java utilizando Spring
 - **Deletar Tópico**: Remove tópicos do banco de dados.
 
 ## Tecnologias Utilizadas
-- **Java 17**
+- **Java 21**
 - **Spring Boot 3.x**
 - **Spring Data JPA**
 - **H2 Database (para desenvolvimento e testes)**
