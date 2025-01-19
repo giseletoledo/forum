@@ -41,7 +41,7 @@ public class SecurityConfigurations {
                     }
                     req.requestMatchers("%s/auth/login".formatted(prefixo)).permitAll(); // Exemplo usando formatted para a rota de login
                     req.requestMatchers(HttpMethod.GET, "%s/topicos/search".formatted(prefixo)).permitAll(); // Exemplo para rota de busca
-                    req.requestMatchers(HttpMethod.GET, "%s/error".formatted(prefixo)).permitAll(); // Exemplo para rota de erro
+                    req.requestMatchers(HttpMethod.POST, "/error").permitAll(); // Exemplo para rota de erro
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
