@@ -11,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
-@RequestMapping("/topicos")
+@RequestMapping("/api/${api.version}/topicos")
 public class TopicoController {
-
 
     private final TopicoService topicoService;
 
@@ -61,5 +60,4 @@ public class TopicoController {
 
         return ResponseEntity.ok(topicos);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.oracleone.forumhub.infra.security;
 
+import com.oracleone.forumhub.infra.api.APIConfigVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,19 +24,24 @@ public class SecurityConfigurations {
     private SecurityFilter securityFilter;
 
     @Autowired
+    private APIConfigVersion apiConfigVersion;
+
+    @Autowired
     private Environment environment;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        var prefixo = "/api/%s".formatted(apiConfigVersion.getApiVersion());
+
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     if (isDevelopmentEnvironment()) {
                         req.requestMatchers(HttpMethod.GET, "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     }
-                    req.requestMatchers("/login").permitAll();
-                    req.requestMatchers(HttpMethod.GET, "/topicos/search").permitAll();// Permitir acesso GET à rota de busca
-                    req.requestMatchers(HttpMethod.GET, "/error").permitAll();
+                    req.requestMatchers("%s/auth/login".formatted(prefixo)).permitAll(); // Exemplo usando formatted para a rota de login
+                    req.requestMatchers(HttpMethod.GET, "%s/topicos/search".formatted(prefixo)).permitAll(); // Exemplo para rota de busca
+                    req.requestMatchers(HttpMethod.GET, "%s/error".formatted(prefixo)).permitAll(); // Exemplo para rota de erro
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
